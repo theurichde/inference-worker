@@ -26,13 +26,13 @@ fi
 trap cleanup SIGINT SIGTERM
 
 # kill any existing llama-server processes
-pgrep llama-server | xargs kill
+pkill llama-server
 
 # we have a string with all the command line arguments in the env var LLAMA_SERVER_CMD_ARGS;
 # it contains a.e. "-hf modelname -ctx_size 4096".
 
 # We need to pass these arguments to llama-server verbatim.
-llama-server $LLAMA_SERVER_CMD_ARGS -port 3098 2>&1 | tee llama.server.log &
+/app/llama-server $LLAMA_SERVER_CMD_ARGS -port 3098 2>&1 | tee llama.server.log &
 
 LLAMA_SERVER_PID=$! # store the process ID (PID) of the background command
 
