@@ -16,8 +16,8 @@ if [[ "$LLAMA_SERVER_CMD_ARGS" != *"/workspace"* ]]; then
     echo "Tip: For reduced downloads and faster startup times, consider using a model stored in a network volume mounted to /workspace."
 fi
 
-# check if the substring -port is in LLAMA_SERVER_CMD_ARGS
-if [[ "$LLAMA_SERVER_CMD_ARGS" != *"-port"* ]]; then
+# check if the substring -port is in LLAMA_SERVER_CMD_ARGS and if yes, raise an error:
+if [[ "$LLAMA_SERVER_CMD_ARGS" == *"-port"* ]]; then
     echo "Error: You must not define -port in LLAMA_SERVER_CMD_ARGS, as port 3098 is required."
     exit 1
 fi

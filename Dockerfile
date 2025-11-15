@@ -33,7 +33,7 @@ WORKDIR /work
 ADD ./src /work
 
 # Install runpod and its dependencies
-RUN pip install -r requirements.txt && chmod +x /work/start.sh
+RUN pip install -r ./requirements.txt && chmod +x /work/start.sh
 
 # Set the entrypoint
 ENTRYPOINT ["/bin/sh", "-c", "/work/start.sh"]
