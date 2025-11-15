@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# fail on error:
+set -e
+
 # This script starts the llama-server with the command line arguments
 # specified in the environment variable LLAMA_SERVER_CMD_ARGS, ensuring
 # that the server listens on port 3098. It also starts the handler.py
