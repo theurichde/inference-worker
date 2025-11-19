@@ -14,6 +14,12 @@ cleanup() {
     exit 0
 }
 
+# check if $LLAMA_SERVER_CMD_ARGS is set
+if [ -z "$LLAMA_SERVER_CMD_ARGS" ]; then
+    echo "start.sh: Warning: LLAMA_SERVER_CMD_ARGS is not set. Defaulting to -hf unsloth/gemma-3-270m-it-GGUF:Q6_K --ctx-size 4096"
+    LLAMA_SERVER_CMD_ARGS="-hf unsloth/gemma-3-270m-it-GGUF:Q6_K --ctx-size 4096"
+fi
+
 # check if the substring /workspace is in LLAMA_SERVER_CMD_ARGS
 if [[ "$LLAMA_SERVER_CMD_ARGS" != *"/workspace"* ]]; then
     echo "start.sh: Tip: For reduced downloads and faster startup times, consider using a model stored in a network volume mounted to /workspace."
