@@ -73,6 +73,12 @@ check_server_is_running() {
     else
         return 1 # failure
     fi
+
+    # check if the process is still running
+    if ! kill -0 $LLAMA_SERVER_PID 2>/dev/null; then
+        echo "start.sh: Error: llama-server process has exited unexpectedly."
+        exit 1
+    fi
 }
 
 echo "start.sh: Waiting for llama-server to start..."
