@@ -14,15 +14,26 @@ cleanup() {
     exit 0
 }
 
+CACHED_LLAMA_ARGS=""
+
+find_cached_path() {
+    CACHED_LLAMA_ARGS="-m $(python ./find_cached.py $LLAMA_CACHED_MODEL $LLAMA_CACHED_GGUF_PATH)"
+}
+
+# check if $LLAMA_CACHED_MODEL is set and not empty
+if [ -n "$LLAMA_CACHED_MODEL" ]; then
+    echo "start.sh: Caching is enabled. Finding cached model path..."
+    find_cached_path
+
+    echo "start.sh: Using cached model with arguments: $CACHED_LLAMA_ARGS"
+else
+    echo "start.sh: WARNING: Caching is disabled. Please visit the inference-worker README and docs to learn more."
+fi
+
 # check if $LLAMA_SERVER_CMD_ARGS is set
 if [ -z "$LLAMA_SERVER_CMD_ARGS" ]; then
     echo "start.sh: Warning: LLAMA_SERVER_CMD_ARGS is not set. Defaulting to -hf unsloth/gemma-3-270m-it-GGUF:IQ2_XXS --ctx-size 512 -ngl 999"
     LLAMA_SERVER_CMD_ARGS="-hf unsloth/gemma-3-270m-it-GGUF:IQ2_XXS --ctx-size 512 -ngl 999"
-fi
-
-# check if the substring /workspace is in LLAMA_SERVER_CMD_ARGS
-if [[ "$LLAMA_SERVER_CMD_ARGS" != *"/workspace"* ]]; then
-    echo "start.sh: Tip: For reduced downloads and faster startup times, consider using a model stored in the RunPod cache."
 fi
 
 # check if the substring --port is in LLAMA_SERVER_CMD_ARGS and if yes, raise an error:
@@ -43,14 +54,14 @@ echo "start.sh: Stopping existing llama-server instances (if any)..."
 }
 
 # we have a string with all the command line arguments in the env var LLAMA_SERVER_CMD_ARGS;
-# it contains a.e. "-hf modelname --ctx-size 4096 -ngl 99".
+# it contains a.e. "-hf modelname --ctx-size 4096 -ngl 999".
 
 echo "start.sh: Running llama-server $LLAMA_SERVER_CMD_ARGS --port 3098"
 
 touch llama.server.log
 
 # We need to pass these arguments to llama-server verbatim.
-LD_LIBRARY_PATH=/app /app/llama-server $LLAMA_SERVER_CMD_ARGS --port 3098 2>&1 | tee llama.server.log &
+LD_LIBRARY_PATH=/app /app/llama-server $CACHED_LLAMA_ARGS $LLAMA_SERVER_CMD_ARGS --port 3098 2>&1 | tee llama.server.log &
 
 LLAMA_SERVER_PID=$! # store the process ID (PID) of the background command
 

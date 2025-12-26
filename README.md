@@ -19,8 +19,7 @@ Streaming responses is also supported.
 
 ## Setup
 
-For the setup to work best, it is recommended to use a network volume attached to all workers which stores the model GGUFs and then reference those files in the launch arguments.
-Make sure your RunPod worker has access to the network volume, i.e. is located in the correct data center.
+To get the best performance out of this worker, it is recommended to use cached models. Please see the [cached models documentation](./docs/cached.md) for more information, this is **highly recommended and will save many resources**.
 
 ## Configuration
 
