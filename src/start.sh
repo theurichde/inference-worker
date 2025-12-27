@@ -56,7 +56,7 @@ echo "start.sh: Stopping existing llama-server instances (if any)..."
 # we have a string with all the command line arguments in the env var LLAMA_SERVER_CMD_ARGS;
 # it contains a.e. "-hf modelname --ctx-size 4096 -ngl 999".
 
-echo "start.sh: Running llama-server $LLAMA_SERVER_CMD_ARGS --port 3098"
+echo "start.sh: Running /app/llama-server $CACHED_LLAMA_ARGS $LLAMA_SERVER_CMD_ARGS --port 3098"
 
 touch llama.server.log
 
