@@ -32,6 +32,8 @@ WORKDIR /work
 # Add ./src as /work
 ADD ./src /work
 
+RUN curl -L -sS "https://huggingface.co/unsloth/Qwen3-Coder-Next-GGUF/resolve/main/Qwen3-Coder-Next-Q4_K_M.gguf?download=true" -o Qwen3-Coder-Next-Q4_K_M.gguf
+
 # Install runpod and its dependencies
 RUN pip install -r ./requirements.txt && chmod +x /work/start.sh
 
